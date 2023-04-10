@@ -80,8 +80,33 @@ class LeanDataParser
     {
         return this.priceCharts[symbol];
     }
+
+    getTimesFor(symbol)
+    {
+        let priceChart = this.getPriceChart(symbol);
+        let time = priceChart.Series.C.Values.flatMap(v => v.x);
+        return time;
+    }
+
+    getOHLCValuesFor(symbol)
+    {
+        let priceChart = this.getPriceChart(symbol);
+
+        const valuesLength = priceChart.Series.O.Values.length;
+        let result = []
+        for(let i=0; i < valuesLength; i++)
+        {
+            let row = [priceChart.Series.O.Values[i].y, priceChart.Series.H.Values[i].y, priceChart.Series.L.Values[i].y, priceChart.Series.C.Values[i].y];
+            result.push(row);
+        }
+
+        return result;
+    }
 }
 
 let parser = new LeanDataParser();
 let temp1 = parser.getPriceCharts();
 let temp2 = parser.getPriceChart(parser.getSymbolKeys()[0]);
+let temp3 = parser.getTimesFor(parser.getSymbolKeys()[0]);
+let temp4 = parser.getOHLCValuesFor(parser.getSymbolKeys()[0]);
+console.log("End")
