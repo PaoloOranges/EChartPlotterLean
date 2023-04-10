@@ -1,4 +1,5 @@
-const jsonData = require('../data/data.json');
+//const jsonData = require('../data/data.json');
+import * as jsonData from '../data/data.json';
 
 const SymbolChartPrefix = "BARS_";
 
