@@ -88,14 +88,17 @@ function getOHLCValuesFor(symbol) {
   return result;
 }
 
-function getOrderDataFor(symbol, timeArray)
+function getOrderDataFor(symbol, timeArray, operation)
 {
-      const orderKeys = Object.keys(ORDERS);
+  let direction = operation == "buy" ? 0 : 1;
+
+  const orderKeys = Object.keys(ORDERS);
       let orders = [];
       orderKeys.forEach(key => {
         orders.push(ORDERS[key]);
       });
-      orders.filter(o => o.Symbol.Value == symbol);  
+      orders = orders.filter(o => o.Symbol.Value == symbol); 
+      orders = orders.filter(o => o.Direction == direction);
       
       let orderData = new Array(timeArray.length);
 
@@ -110,10 +113,21 @@ function getOrderDataFor(symbol, timeArray)
       return returnArray;
 }
 
+function getBuyOrderDataFor(symbol, timeArray)
+{
+  return getOrderDataFor(symbol, timeArray, "buy");
+}
+
+function getSellOrderDataFor(symbol, timeArray)
+{
+  return getOrderDataFor(symbol, timeArray, "sell");
+}
+
 const timeArray = getTimeArray('ETHEUR');
 const timeStrings = convertTimeArrayToStrings(timeArray);
 const ohlcData = getOHLCValuesFor('ETHEUR');
-const orderData = getOrderDataFor('ETHEUR', timeArray);
+const buyOrderData = getBuyOrderDataFor('ETHEUR', timeArray);
+const sellOrderData = getSellOrderDataFor('ETHEUR', timeArray);
 
 function getDataForLegend()
 {
@@ -196,9 +210,17 @@ function getDataForSeries()
     )).concat([
         {
             type: 'scatter',
-            data: orderData
-        }
-    ]
+            data: buyOrderData,
+            symbol: 'triangle',
+            color: 'green'
+        }]
+    ).concat([
+      {
+          type: 'scatter',
+          data: sellOrderData,
+          symbol: 'diamond',
+          color: 'red'
+      }]
     );
 }
 
