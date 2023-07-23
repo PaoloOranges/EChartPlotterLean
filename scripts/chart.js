@@ -99,31 +99,6 @@ function getOrderDataFor(symbol, timeArray)
       
       let orderData = new Array(timeArray.length);
 
-      // "Orders": {
-      //   "1": {
-      //     "Type": 0,
-      //     "Id": 1,
-      //     "ContingentId": 0,
-      //     "BrokerId": [
-      //       "1"
-      //     ],
-      //     "Symbol": {
-      //       "Value": "ETHEUR",
-      //       "ID": "ETHEUR XJ",
-      //       "Permtick": "ETHEUR"
-      //     },
-      //     "Price": 3331.45,
-      //     "PriceCurrency": "EUR",
-      //     "Time": "2021-10-20T00:00:00Z",
-      //     "CreatedTime": "2021-10-20T00:00:00Z",
-      //     "LastFillTime": "2021-10-20T00:00:00Z",
-      //     "Quantity": 0.24,
-      //     "Status": 3,
-      //     "Properties": {
-      //       "TimeInForce": {}
-      //     },
-      //     "SecurityType": 7,
-
       let returnArray = []
       orders.forEach(o => {
         const oTime = Date.parse(o.Time);
@@ -157,53 +132,53 @@ function getDataForSeries()
         color0: downColor,
         borderColor: upBorderColor,
         borderColor0: downBorderColor
-      },
-      markLine: {
-        symbol: ['none', 'none'],
-        data: [
-          [
-            {
-              name: 'from lowest to highest',
-              type: 'min',
-              valueDim: 'lowest',
-              symbol: 'circle',
-              symbolSize: 10,
-              label: {
-                show: false
-              },
-              emphasis: {
-                label: {
-                  show: false
-                }
-              }
-            },
-            {
-              type: 'max',
-              valueDim: 'highest',
-              symbol: 'circle',
-              symbolSize: 10,
-              label: {
-                show: false
-              },
-              emphasis: {
-                label: {
-                  show: false
-                }
-              }
-            }
-          ],
-          {
-            name: 'min line on close',
-            type: 'min',
-            valueDim: 'close'
-          },
-          {
-            name: 'max line on close',
-            type: 'max',
-            valueDim: 'close'
-          }
-        ]
-      }
+      }//,
+      // markLine: {
+      //   symbol: ['none', 'none'],
+      //   data: [
+      //     [
+      //       {
+      //         name: 'from lowest to highest',
+      //         type: 'min',
+      //         valueDim: 'lowest',
+      //         symbol: 'circle',
+      //         symbolSize: 10,
+      //         label: {
+      //           show: false
+      //         },
+      //         emphasis: {
+      //           label: {
+      //             show: false
+      //           }
+      //         }
+      //       },
+      //       {
+      //         type: 'max',
+      //         valueDim: 'highest',
+      //         symbol: 'circle',
+      //         symbolSize: 10,
+      //         label: {
+      //           show: false
+      //         },
+      //         emphasis: {
+      //           label: {
+      //             show: false
+      //           }
+      //         }
+      //       }
+      //     ],
+      //     {
+      //       name: 'min line on close',
+      //       type: 'min',
+      //       valueDim: 'close'
+      //     },
+      //     {
+      //       name: 'max line on close',
+      //       type: 'max',
+      //       valueDim: 'close'
+      //     }
+      //   ]
+      // }
     },
   ].concat(indicatorsArray.map(
     (x) => 
