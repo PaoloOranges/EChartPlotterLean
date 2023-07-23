@@ -131,7 +131,9 @@ const sellOrderData = getSellOrderDataFor('ETHEUR', timeArray);
 
 function getDataForLegend()
 {
-  return ['ETHEUR'].concat(indicatorsArray.map(x => x.Name));
+  return ['ETHEUR'].concat(indicatorsArray.map(x => x.Name)).concat([
+    'BUY', 'SELL'
+  ]);
 }
 
 function getDataForSeries()
