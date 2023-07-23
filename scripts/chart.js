@@ -12,35 +12,50 @@ const downBorderColor = '#008F28';
 const SymbolChartPrefix = "BARS_";
 
 const CHARTS = jsonData.Charts;
+const ORDERS = jsonData.Orders;
+
 const INDICATORS = CHARTS.Indicators.Series;
 const SYMBOLS_KEYS = Object.keys(CHARTS).filter(key => key.startsWith(SymbolChartPrefix));
 const INDICATORS_KEYS = Object.keys(INDICATORS).filter(key => key);
-const ORDERS = jsonData.Orders;
 
-let priceCharts = {};
-let indicatorsArray = [];
 
-SYMBOLS_KEYS.forEach(key => {
-    symbolKey = key.replace(SymbolChartPrefix, "");
-    let chart = CHARTS[key];
-    chart.Name = symbolKey;
-    priceCharts[symbolKey] = chart;
-});
+function getPriceCharts()
+{
+    let returnPriceChart = {};
+    SYMBOLS_KEYS.forEach(key => {
+        symbolKey = key.replace(SymbolChartPrefix, "");
+        let chart = CHARTS[key];
+        chart.Name = symbolKey;
+        returnPriceChart[symbolKey] = chart;
+    });
+    
+    return returnPriceChart;
+}
 
-Object.keys(INDICATORS).filter(key => {
-  indicatorsArray.push(INDICATORS[key]);
-});
+function getIndicatorsArray()
+{
+    let returnIndicatorsArray = [];
+
+    Object.keys(INDICATORS).filter(key => {
+        returnIndicatorsArray.push(INDICATORS[key]);
+      });
+
+    return returnIndicatorsArray;
+}
+
+let priceCharts = getPriceCharts();
+let indicatorsArray = getIndicatorsArray();
+
 
 function getTimeArray(symbol)
 {
   const priceChart = priceCharts[symbol];
-  return priceChart.Series.C.Values.flatMap(v => v.x);
+  return priceChart.Series.C.Values.flatMap(v => v.x * 1000);
 }
 
-function getTimesFor(symbol) {
-  const priceChart = priceCharts[symbol];
-  const times = priceChart.Series.C.Values.flatMap(v => {
-    const date = new Date(v.x * 1000);
+function convertTimeArrayToStrings(timeArray) {
+  const times = timeArray.flatMap(v => {
+    const date = new Date(v);
     const day = date.getDate();
     const month = date.getMonth();
     const year = date.getFullYear();
@@ -73,7 +88,7 @@ function getOHLCValuesFor(symbol) {
   return result;
 }
 
-function getOrderDataFor(symbol, timeData)
+function getOrderDataFor(symbol, timeArray)
 {
       const orderKeys = Object.keys(ORDERS);
       let orders = [];
@@ -82,7 +97,7 @@ function getOrderDataFor(symbol, timeData)
       });
       orders.filter(o => o.Symbol.Value == symbol);  
       
-      let orderData = new Array(timeData.length);
+      let orderData = new Array(timeArray.length);
 
       // "Orders": {
       //   "1": {
@@ -111,7 +126,7 @@ function getOrderDataFor(symbol, timeData)
 
       orders.forEach(o => {
         const oTime = Date.parse(o.Time);
-        const indexInTime = timeData.findIndex(t => t == oTime);
+        const indexInTime = timeArray.findIndex(t => t == oTime);
         console.log(indexInTime);
       });
 }
@@ -198,9 +213,9 @@ function getDataForSeries()
 }
 
 const timeArray = getTimeArray('ETHEUR');
-const timeData = getTimesFor('ETHEUR');
+const timeStrings = convertTimeArrayToStrings(timeArray);
 const ohlcData = getOHLCValuesFor('ETHEUR');
-const orderData = getOrderDataFor('ETHEUR', timeData);
+const orderData = getOrderDataFor('ETHEUR', timeArray);
 
 option = {
   title: {
@@ -223,7 +238,7 @@ option = {
   },
   xAxis: {
     type: 'category',
-    data: timeData,
+    data: timeStrings,
     boundaryGap: false,
     axisLine: { onZero: false },
     splitLine: { show: false },
