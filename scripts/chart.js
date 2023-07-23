@@ -124,12 +124,21 @@ function getOrderDataFor(symbol, timeArray)
       //     },
       //     "SecurityType": 7,
 
+      let returnArray = []
       orders.forEach(o => {
         const oTime = Date.parse(o.Time);
         const indexInTime = timeArray.findIndex(t => t == oTime);
-        console.log(indexInTime);
+        //console.log(indexInTime);
+        returnArray.push([indexInTime, o.Price]);
       });
+
+      return returnArray;
 }
+
+const timeArray = getTimeArray('ETHEUR');
+const timeStrings = convertTimeArrayToStrings(timeArray);
+const ohlcData = getOHLCValuesFor('ETHEUR');
+const orderData = getOrderDataFor('ETHEUR', timeArray);
 
 function getDataForLegend()
 {
@@ -209,13 +218,14 @@ function getDataForSeries()
         }
       }
     }
-    ));
+    )).concat([
+        {
+            type: 'scatter',
+            data: orderData
+        }
+    ]
+    );
 }
-
-const timeArray = getTimeArray('ETHEUR');
-const timeStrings = convertTimeArrayToStrings(timeArray);
-const ohlcData = getOHLCValuesFor('ETHEUR');
-const orderData = getOrderDataFor('ETHEUR', timeArray);
 
 option = {
   title: {
