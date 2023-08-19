@@ -214,6 +214,7 @@ function getDataForSeries()
             type: 'scatter',
             data: buyOrderData,
             symbol: 'triangle',
+            symbolSize: 15,
             color: 'green'
         }]
     ).concat([
@@ -221,7 +222,8 @@ function getDataForSeries()
           type: 'scatter',
           data: sellOrderData,
           symbol: 'diamond',
-          color: 'red'
+          symbolSize: 15,
+          color: '#FF33F6'
       }]
     );
 }
