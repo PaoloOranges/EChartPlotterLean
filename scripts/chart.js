@@ -242,11 +242,19 @@ option = {
   legend: {
     data: getDataForLegend()
   },
-  grid: {
-    left: '10%',
-    right: '10%',
-    bottom: '15%'
-  },
+  grid: [
+    {
+      left: '10%',
+      right: '10%',
+      bottom: '30%'
+    },
+    {
+      left: '10%',
+      right: '10%',
+      top: '25%',
+      bottom: '10%'
+    }
+  ],
   xAxis: {
     type: 'category',
     data: timeStrings,
