@@ -36,16 +36,34 @@ function getIndicatorsArray()
 {
     let returnIndicatorsArray = [];
 
-    Object.keys(INDICATORS).filter(key => {
-        returnIndicatorsArray.push(INDICATORS[key]);
+    let indicatorKeys = Object.keys(INDICATORS);
+    
+    indicatorKeys.forEach(key => {
+        if(!key.startsWith("MACD"))
+        {
+          returnIndicatorsArray.push(INDICATORS[key]);
+        }
       });
 
     return returnIndicatorsArray;
 }
 
+function getMACD()
+{
+  let indicatorKeys = Object.keys(INDICATORS);
+  for(const k in indicatorKeys)
+  {
+    const key = indicatorKeys[k];
+    if(key.startsWith("MACD"))
+    {
+      return INDICATORS[key];
+    }
+  }
+}
+
 let priceCharts = getPriceCharts();
 let indicatorsArray = getIndicatorsArray();
-
+let macd = getMACD();
 
 function getTimeArray(symbol)
 {
@@ -137,7 +155,7 @@ function getDataForLegend()
 }
 
 function getDataForSeries()
-{
+{  
   return [
     {
       name: 'ETHEUR',
@@ -209,7 +227,17 @@ function getDataForSeries()
         }
       }
     }
-    )).concat([
+    )).concat(
+      [
+        {
+            name: macd.Name,
+            type: 'bar',
+            data: getValuesForIndicator(macd),
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+        }
+      ]
+    ).concat([
         {
             type: 'scatter',
             data: buyOrderData,
@@ -255,21 +283,42 @@ option = {
       bottom: '10%'
     }
   ],
-  xAxis: {
-    type: 'category',
-    data: timeStrings,
-    boundaryGap: false,
-    axisLine: { onZero: false },
-    splitLine: { show: false },
-    min: 'dataMin',
-    max: 'dataMax'
-  },
-  yAxis: {
-    scale: true,
-    splitArea: {
-      show: true
-    }
-  },
+  xAxis: [
+    {
+      type: 'category',
+      data: timeStrings,
+      boundaryGap: false,
+      axisLine: { onZero: false },
+      splitLine: { show: false },
+      min: 'dataMin',
+      max: 'dataMax'
+    },
+    {
+      gridIndex: 1,
+      type: 'category',
+      data: timeStrings,
+      boundaryGap: false,
+      axisLine: { onZero: false },
+      splitLine: { show: false },
+      min: 'dataMin',
+      max: 'dataMax'
+    },
+],
+  yAxis: [
+    {
+      scale: true,
+      splitArea: {
+        show: true
+      }
+    },
+    {      
+      gridIndex: 1,
+      scale: true,
+      splitArea: {
+        show: true
+      }
+    },
+  ],
   dataZoom: [
     {
       type: 'inside',
