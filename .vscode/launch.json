@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open home.html",
-            "file": "${workspaceFolder}\\home.html",
+            "file": "${workspaceFolder}//home.html",
             //"preLaunchTask": "Copy Result to JS file"
         }
     ]
