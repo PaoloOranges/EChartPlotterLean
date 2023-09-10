@@ -115,6 +115,33 @@ function getVolumeFor(symbol)
   return values.map(v => v.y != 0 ? v.y : '-');
 }
 
+function getVolumePosFor(symbol)
+{
+  const vol = getVolumeFor(symbol);
+  const priceChart = priceCharts[symbol];
+  const closeValues = priceChart.Series.C.Values.map(v => v.y);
+
+  result = [];
+  result.push(vol[0])
+  for(let i = 1; i < vol.length; i++)
+  {
+    if(closeValues[i] > closeValues[i-1])
+    {
+      result.push(vol[i]);
+    }
+    else
+    {
+      result.push('-');
+    }
+  }
+  return result;
+}
+
+function getVolumeNegFor(symbol)
+{
+  return getVolumeFor(symbol);
+}
+
 function getOrderDataFor(symbol, timeArray, operation)
 {
   let direction = operation == "buy" ? 0 : 1;
@@ -154,7 +181,8 @@ const SYMBOL = 'ETHEUR';
 const timeArray = getTimeArray(SYMBOL);
 const timeStrings = convertTimeArrayToStrings(timeArray);
 const ohlcData = getOHLCValuesFor(SYMBOL);
-const volumeData = getVolumeFor(SYMBOL);
+const volumePosData = getVolumePosFor(SYMBOL);
+const volumeNegData = getVolumeNegFor(SYMBOL);
 const buyOrderData = getBuyOrderDataFor(SYMBOL, timeArray);
 const sellOrderData = getSellOrderDataFor(SYMBOL, timeArray);
 
@@ -253,7 +281,7 @@ function getDataForSeries()
         {
             name: "Volume",
             type: 'bar',
-            data: volumeData,
+            data: volumePosData,
             xAxisIndex: 1,
             yAxisIndex: 1,
         }
