@@ -244,8 +244,8 @@ function getDataForSeries()
             name: macd.Name,
             type: 'bar',
             data: getValuesForIndicator(macd),
-            xAxisIndex: 1,
-            yAxisIndex: 1,
+            xAxisIndex: 2,
+            yAxisIndex: 2,
         }
       ]
     ).concat(
@@ -293,14 +293,20 @@ option = {
   },
   grid: [
     {
-      left: '10%',
-      right: '10%',
-      bottom: '30%'
+      left: '5%',
+      right: '1%',
+      bottom: '40%'
     },
     {
-      left: '10%',
-      right: '10%',
-      top: '70%',
+      left: '5%',
+      right: '1%',
+      top: '60%',
+      bottom: '20%'
+    },
+    {
+      left: '5%',
+      right: '1%',
+      top: '80%',
       bottom: '0%'
     }
   ],
@@ -323,6 +329,16 @@ option = {
       splitLine: { show: false },
       min: 'dataMin',
       max: 'dataMax'
+    },    
+    {
+      gridIndex: 2,
+      type: 'category',
+      data: timeStrings,
+      boundaryGap: false,
+      axisLine: { onZero: false },
+      splitLine: { show: false },
+      min: 'dataMin',
+      max: 'dataMax'
     },
 ],
   yAxis: [
@@ -338,6 +354,13 @@ option = {
       splitArea: {
         show: true
       }
+    },    
+    {      
+      gridIndex: 2,
+      scale: true,
+      splitArea: {
+        show: true
+      }
     },
   ],
   dataZoom: [
@@ -345,7 +368,7 @@ option = {
       type: 'inside',
       start: 50,
       end: 100,
-      xAxisIndex: [0, 1]
+      xAxisIndex: [0, 1, 2]
     },
     {
       show: true,
@@ -353,7 +376,7 @@ option = {
       top: '90%',
       start: 50,
       end: 100,
-      xAxisIndex: [0, 1]
+      xAxisIndex: [0, 1, 2]
     }
   ],
   series: getDataForSeries()
