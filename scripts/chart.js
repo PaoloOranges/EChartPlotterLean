@@ -115,31 +115,40 @@ function getVolumeFor(symbol)
   return values.map(v => v.y != 0 ? v.y : '-');
 }
 
-function getVolumePosFor(symbol)
+function getVolumeComparedFor(symbol, compOperator)
 {
   const vol = getVolumeFor(symbol);
-  const priceChart = priceCharts[symbol];
-  const closeValues = priceChart.Series.C.Values.map(v => v.y);
-
-  result = [];
-  result.push(vol[0])
-  for(let i = 1; i < vol.length; i++)
+  result = vol;
+  if(compOperator != null)
   {
-    if(closeValues[i] > closeValues[i-1])
+    const priceChart = priceCharts[symbol];
+    const closeValues = priceChart.Series.C.Values.map(v => v.y);
+  
+    result = [];
+    result.push(vol[0])
+    for(let i = 1; i < vol.length; i++)
     {
-      result.push(vol[i]);
-    }
-    else
-    {
-      result.push('-');
+      if(compOperator(closeValues[i],closeValues[i-1]))
+      {
+        result.push(vol[i]);
+      }
+      else
+      {
+        result.push('-');
+      }
     }
   }
   return result;
 }
 
+function getVolumePosFor(symbol)
+{
+  return getVolumeComparedFor(symbol, (v1,v2) => v1 > v2) ;
+}
+
 function getVolumeNegFor(symbol)
 {
-  return getVolumeFor(symbol);
+  return getVolumeComparedFor(symbol, (v1,v2) => v1 < v2) ;
 }
 
 function getOrderDataFor(symbol, timeArray, operation)
@@ -284,6 +293,18 @@ function getDataForSeries()
             data: volumePosData,
             xAxisIndex: 1,
             yAxisIndex: 1,
+            color: "green"
+        }
+      ]
+    ).concat(
+      [
+        {
+            name: "Volume",
+            type: 'bar',
+            data: volumeNegData,
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            color: "red"
         }
       ]
     ).concat([
