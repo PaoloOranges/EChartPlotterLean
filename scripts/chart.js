@@ -88,7 +88,7 @@ function convertTimeArrayToStrings(timeArray) {
 function getValuesForIndicator(indicator)
 {
   values = indicator.Values;
-  var time = priceCharts['ETHEUR'].Series.O.Values[0].x;
+  var time = priceCharts[SYMBOL].Series.O.Values[0].x;
   values = values.filter(v => v.x >= time);
   return values.map(v => v.y != 0 ? v.y : '-');
 }
@@ -104,6 +104,15 @@ function getOHLCValuesFor(symbol) {
   }
 
   return result;
+}
+
+function getVolumeFor(symbol)
+{
+  const priceChart = priceCharts[symbol];
+  const values = priceChart.Series.VOL.Values;
+  console.assert(values.length == priceChart.Series.O.Values.length, "Volume data  length not equal to price data length");
+  
+  return values.map(v => v.y != 0 ? v.y : '-');
 }
 
 function getOrderDataFor(symbol, timeArray, operation)
@@ -141,15 +150,17 @@ function getSellOrderDataFor(symbol, timeArray)
   return getOrderDataFor(symbol, timeArray, "sell");
 }
 
-const timeArray = getTimeArray('ETHEUR');
+const SYMBOL = 'ETHEUR';
+const timeArray = getTimeArray(SYMBOL);
 const timeStrings = convertTimeArrayToStrings(timeArray);
-const ohlcData = getOHLCValuesFor('ETHEUR');
-const buyOrderData = getBuyOrderDataFor('ETHEUR', timeArray);
-const sellOrderData = getSellOrderDataFor('ETHEUR', timeArray);
+const ohlcData = getOHLCValuesFor(SYMBOL);
+const volumeData = getVolumeFor(SYMBOL);
+const buyOrderData = getBuyOrderDataFor(SYMBOL, timeArray);
+const sellOrderData = getSellOrderDataFor(SYMBOL, timeArray);
 
 function getDataForLegend()
 {
-  return ['ETHEUR'].concat(indicatorsArray.map(x => x.Name)).concat([
+  return [SYMBOL].concat(indicatorsArray.map(x => x.Name)).concat([
     'BUY', 'SELL'
   ]);
 }
@@ -158,7 +169,7 @@ function getDataForSeries()
 {  
   return [
     {
-      name: 'ETHEUR',
+      name: SYMBOL,
       type: 'candlestick',
       data: ohlcData,
       itemStyle: {
@@ -237,6 +248,16 @@ function getDataForSeries()
             yAxisIndex: 1,
         }
       ]
+    ).concat(
+      [
+        {
+            name: "Volume",
+            type: 'bar',
+            data: volumeData,
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+        }
+      ]
     ).concat([
         {
             type: 'scatter',
@@ -279,8 +300,8 @@ option = {
     {
       left: '10%',
       right: '10%',
-      top: '25%',
-      bottom: '10%'
+      top: '70%',
+      bottom: '0%'
     }
   ],
   xAxis: [
@@ -323,14 +344,16 @@ option = {
     {
       type: 'inside',
       start: 50,
-      end: 100
+      end: 100,
+      xAxisIndex: [0, 1]
     },
     {
       show: true,
       type: 'slider',
       top: '90%',
       start: 50,
-      end: 100
+      end: 100,
+      xAxisIndex: [0, 1]
     }
   ],
   series: getDataForSeries()
