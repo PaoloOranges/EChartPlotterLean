@@ -15,6 +15,7 @@ const CHARTS = jsonData.Charts;
 const ORDERS = jsonData.Orders;
 
 const INDICATORS = CHARTS.Indicators.Series;
+const OSCILLATORS = CHARTS.Oscillators.Series;
 const SYMBOLS_KEYS = Object.keys(CHARTS).filter(key => key.startsWith(SymbolChartPrefix));
 const INDICATORS_KEYS = Object.keys(INDICATORS).filter(key => key);
 
@@ -39,30 +40,41 @@ function getIndicatorsArray()
     let indicatorKeys = Object.keys(INDICATORS);
     
     indicatorKeys.forEach(key => {
-        if(!key.startsWith("MACD"))
-        {
-          returnIndicatorsArray.push(INDICATORS[key]);
-        }
+          returnIndicatorsArray.push(INDICATORS[key]);        
       });
 
     return returnIndicatorsArray;
 }
 
+function getOscillatorsArray()
+{
+  let returnOscillatorsArray = [];
+
+  let oscillatorKeys = Object.keys(OSCILLATORS);
+  
+  oscillatorKeys.forEach(key => {
+      returnOscillatorsArray.push(OSCILLATORS[key]);        
+    });
+
+  return returnOscillatorsArray;
+}
+
 function getMACD()
 {
-  let indicatorKeys = Object.keys(INDICATORS);
+  let indicatorKeys = Object.keys(OSCILLATORS);
   for(const k in indicatorKeys)
   {
     const key = indicatorKeys[k];
     if(key.startsWith("MACD"))
     {
-      return INDICATORS[key];
+      return OSCILLATORS[key];
     }
   }
 }
 
 let priceCharts = getPriceCharts();
 let indicatorsArray = getIndicatorsArray();
+let oscillatorsArray = getOscillatorsArray();
 let macd = getMACD();
 
 function getTimeArray(symbol)
