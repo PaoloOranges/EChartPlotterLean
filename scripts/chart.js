@@ -288,17 +288,18 @@ function getDataForSeries()
         }
       }
     }
-    )).concat(
-      [
-        {
-            name: macd.Name,
-            type: 'bar',
-            data: getValuesForIndicator(macd),
-            xAxisIndex: 2,
-            yAxisIndex: 2,
+    )).concat(oscillatorsArray.map(
+      (x) => 
+      {
+        return {
+          name: x.Name,
+          type: 'line',
+          data: getValuesForIndicator(x),
+          smooth: true,
+          xAxisIndex: 2,
+          yAxisIndex: 2,
         }
-      ]
-    ).concat(
+      })).concat(
       [
         {
             name: "Volume",
