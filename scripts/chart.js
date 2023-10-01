@@ -59,13 +59,13 @@ function getOscillatorsArray()
   return returnOscillatorsArray;
 }
 
-function getMACD()
+function getOscillator(name)
 {
-  let indicatorKeys = Object.keys(OSCILLATORS);
-  for(const k in indicatorKeys)
+  let oscillatorKeys = Object.keys(OSCILLATORS);
+  for(const k in oscillatorKeys)
   {
-    const key = indicatorKeys[k];
-    if(key.startsWith("MACD"))
+    const key = oscillatorKeys[k];
+    if(key.startsWith(name))
     {
       return OSCILLATORS[key];
     }
@@ -75,7 +75,8 @@ function getMACD()
 let priceCharts = getPriceCharts();
 let indicatorsArray = getIndicatorsArray();
 let oscillatorsArray = getOscillatorsArray();
-let macd = getMACD();
+let macd = getOscillator("MACD");
+let adx = getOscillator("ADX");
 
 function getTimeArray(symbol)
 {
