@@ -364,12 +364,12 @@ option = {
       left: '5%',
       right: '1%',
       top: '60%',
-      bottom: '20%'
+      bottom: '30%'
     },
     {
       left: '5%',
       right: '1%',
-      top: '80%',
+      top: '72%',
       bottom: '0%'
     }
   ],
@@ -436,7 +436,6 @@ option = {
     {
       show: true,
       type: 'slider',
-      top: '90%',
       start: 50,
       end: 100,
       xAxisIndex: [0, 1, 2]
