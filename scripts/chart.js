@@ -106,13 +106,16 @@ function getValuesForIndicator(indicator)
   return values.map(v => v.y != 0 ? v.y : '-');
 }
 
-function getOHLCValuesFor(symbol) {
+function getOCLHValuesFor(symbol) {
   const priceChart = priceCharts[symbol];
 
   const valuesLength = priceChart.Series.O.Values.length;
   let result = []
   for (let i = 0; i < valuesLength; i++) {
-    let row = [priceChart.Series.O.Values[i].y, priceChart.Series.H.Values[i].y, priceChart.Series.L.Values[i].y, priceChart.Series.C.Values[i].y];
+    let row = [priceChart.Series.O.Values[i].y, 
+                priceChart.Series.C.Values[i].y, 
+                priceChart.Series.L.Values[i].y, 
+                priceChart.Series.H.Values[i].y];
     result.push(row);
   }
 
@@ -202,7 +205,7 @@ function getSellOrderDataFor(symbol, timeArray)
 const SYMBOL = 'ETHEUR';
 const timeArray = getTimeArray(SYMBOL);
 const timeStrings = convertTimeArrayToStrings(timeArray);
-const ohlcData = getOHLCValuesFor(SYMBOL);
+const oclhData = getOCLHValuesFor(SYMBOL);
 const volumePosData = getVolumePosFor(SYMBOL);
 const volumeNegData = getVolumeNegFor(SYMBOL);
 const buyOrderData = getBuyOrderDataFor(SYMBOL, timeArray);
@@ -221,7 +224,7 @@ function getDataForSeries()
     {
       name: SYMBOL,
       type: 'candlestick',
-      data: ohlcData,
+      data: oclhData,
       itemStyle: {
         color: upColor,
         color0: downColor,
