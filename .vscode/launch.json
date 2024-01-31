@@ -10,6 +10,13 @@
             "name": "Open home.html",
             "file": "${workspaceFolder}//home.html",
             //"preLaunchTask": "Copy Result to JS file"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open test.html",
+            "file": "${workspaceFolder}//test.html",
+            //"preLaunchTask": "Copy Result to JS file"
         }
     ]
 }
