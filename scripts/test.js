@@ -153,8 +153,8 @@ option = {
     },
     {
       name: 'VAR',
-      type: 'line',
-      data: calculateDifferencial(calculateMA(10, data), 4),
+      type: 'bar',
+      data: calculateDifferencial(calculateMA(5, data), 3),
       smooth: true,
       showSymbol: false,
       lineStyle: {

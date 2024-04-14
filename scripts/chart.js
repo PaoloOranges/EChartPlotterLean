@@ -81,7 +81,7 @@ let adx = getOscillator("ADX");
 function getTimeArray(symbol)
 {
   const priceChart = priceCharts[symbol];
-  return priceChart.Series.C.Values.flatMap(v => v.x * 1000);
+  return priceChart.Series.C.Values.flatMap(v => v[0] * 1000);
 }
 
 function convertTimeArrayToStrings(timeArray) {
@@ -101,9 +101,9 @@ function convertTimeArrayToStrings(timeArray) {
 function getValuesForIndicator(indicator)
 {
   values = indicator.Values;
-  var time = priceCharts[SYMBOL].Series.O.Values[0].x;
-  values = values.filter(v => v.x >= time);
-  return values.map(v => v.y != 0 ? v.y : '-');
+  var time = priceCharts[SYMBOL].Series.O.Values[0][0];
+  values = values.filter(v => v[0] >= time);
+  return values.map(v => v[1] != 0 ? v[1] : '-');
 }
 
 function getOCLHValuesFor(symbol) {
@@ -112,10 +112,10 @@ function getOCLHValuesFor(symbol) {
   const valuesLength = priceChart.Series.O.Values.length;
   let result = []
   for (let i = 0; i < valuesLength; i++) {
-    let row = [priceChart.Series.O.Values[i].y, 
-                priceChart.Series.C.Values[i].y, 
-                priceChart.Series.L.Values[i].y, 
-                priceChart.Series.H.Values[i].y];
+    let row = [priceChart.Series.O.Values[i][1], 
+                priceChart.Series.C.Values[i][1], 
+                priceChart.Series.L.Values[i][1], 
+                priceChart.Series.H.Values[i][1]];
     result.push(row);
   }
 
@@ -128,7 +128,7 @@ function getVolumeFor(symbol)
   const values = priceChart.Series.VOL.Values;
   console.assert(values.length == priceChart.Series.O.Values.length, "Volume data  length not equal to price data length");
   
-  return values.map(v => v.y != 0 ? v.y : '-');
+  return values.map(v => v[1] != 0 ? v[1] : '-');
 }
 
 function getVolumeComparedFor(symbol, compOperator)
