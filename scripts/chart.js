@@ -109,7 +109,7 @@ function getValuesForIndicator(indicator)
 function getOCLHValuesFor(symbol) {
   const priceChart = priceCharts[symbol];
 
-  const valuesLength = priceChart.Series.O.Values.length;
+  const valuesLength = priceChart.Series.C.Values.length;
   let result = []
   for (let i = 0; i < valuesLength; i++) {
     let row = [priceChart.Series.O.Values[i][1], 
@@ -138,7 +138,7 @@ function getVolumeComparedFor(symbol, compOperator)
   if(compOperator != null)
   {
     const priceChart = priceCharts[symbol];
-    const closeValues = priceChart.Series.C.Values.map(v => v.y);
+    const closeValues = priceChart.Series.C.Values.map(v => v[1]);
   
     result = [];
     result.push(vol[0])
@@ -179,8 +179,6 @@ function getOrderDataFor(symbol, timeArray, operation)
       orders = orders.filter(o => o.Symbol.Value == symbol); 
       orders = orders.filter(o => o.Direction == direction);
       
-      let orderData = new Array(timeArray.length);
-
       let returnArray = []
       orders.forEach(o => {
         const oTime = Date.parse(o.Time);
@@ -230,53 +228,7 @@ function getDataForSeries()
         color0: downColor,
         borderColor: upBorderColor,
         borderColor0: downBorderColor
-      }//,
-      // markLine: {
-      //   symbol: ['none', 'none'],
-      //   data: [
-      //     [
-      //       {
-      //         name: 'from lowest to highest',
-      //         type: 'min',
-      //         valueDim: 'lowest',
-      //         symbol: 'circle',
-      //         symbolSize: 10,
-      //         label: {
-      //           show: false
-      //         },
-      //         emphasis: {
-      //           label: {
-      //             show: false
-      //           }
-      //         }
-      //       },
-      //       {
-      //         type: 'max',
-      //         valueDim: 'highest',
-      //         symbol: 'circle',
-      //         symbolSize: 10,
-      //         label: {
-      //           show: false
-      //         },
-      //         emphasis: {
-      //           label: {
-      //             show: false
-      //           }
-      //         }
-      //       }
-      //     ],
-      //     {
-      //       name: 'min line on close',
-      //       type: 'min',
-      //       valueDim: 'close'
-      //     },
-      //     {
-      //       name: 'max line on close',
-      //       type: 'max',
-      //       valueDim: 'close'
-      //     }
-      //   ]
-      // }
+      }
     },
   ].concat(indicatorsArray.map(
     (x) => 
@@ -325,20 +277,22 @@ function getDataForSeries()
         }
       ]
     ).concat([
-        {
-            type: 'scatter',
-            data: buyOrderData,
-            symbol: 'triangle',
-            symbolSize: 15,
-            color: 'green'
+      {
+        name: "Buy",
+        type: 'scatter',
+        data: buyOrderData,
+        symbol: 'pin',
+        symbolSize: 15,
+        color: 'green'
         }]
     ).concat([
       {
-          type: 'scatter',
-          data: sellOrderData,
-          symbol: 'diamond',
-          symbolSize: 15,
-          color: '#FF33F6'
+        name: "Sell",
+        type: 'scatter',
+        data: sellOrderData,
+        symbol: 'pin',
+        symbolSize: 15,
+        color: 'red'
       }]
     );
 }
@@ -353,6 +307,9 @@ option = {
     axisPointer: {
       type: 'cross'
     }
+  },
+  axisPointer: {
+    link: { xAxisIndex: 'all' }    
   },
   legend: {
     data: getDataForLegend()

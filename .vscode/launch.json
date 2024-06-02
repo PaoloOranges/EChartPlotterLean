@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Open home.html",
             "file": "${workspaceFolder}//home.html",
-            //"preLaunchTask": "Copy Result to JS file"
+            "preLaunchTask": "Copy Result to JS file"
         },
         {
             "type": "chrome",
