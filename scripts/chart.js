@@ -88,7 +88,7 @@ function convertTimeArrayToStrings(timeArray) {
   const times = timeArray.flatMap(v => {
     const date = new Date(v);
     const day = date.getDate();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
     const hour = date.getHours();
     const minute = date.getMinutes();
