@@ -11,11 +11,11 @@ const downBorderColor = '#008F28';
 
 const SymbolChartPrefix = "BARS_";
 
-const CHARTS = jsonData.Charts;
-const ORDERS = jsonData.Orders;
+const CHARTS = jsonData.charts;
+const ORDERS = jsonData.orders;
 
-const INDICATORS = CHARTS.Indicators.Series;
-const OSCILLATORS = CHARTS.Oscillators.Series;
+const INDICATORS = CHARTS.Indicators.series;
+const OSCILLATORS = CHARTS.Oscillators.series;
 const SYMBOLS_KEYS = Object.keys(CHARTS).filter(key => key.startsWith(SymbolChartPrefix));
 const INDICATORS_KEYS = Object.keys(INDICATORS).filter(key => key);
 
@@ -81,7 +81,7 @@ let adx = getOscillator("ADX");
 function getTimeArray(symbol)
 {
   const priceChart = priceCharts[symbol];
-  return priceChart.Series.C.Values.flatMap(v => v[0] * 1000);
+  return priceChart.series.C.values.flatMap(v => v[0] * 1000);
 }
 
 function convertTimeArrayToStrings(timeArray) {
@@ -100,8 +100,8 @@ function convertTimeArrayToStrings(timeArray) {
 
 function getValuesForIndicator(indicator)
 {
-  values = indicator.Values;
-  var time = priceCharts[SYMBOL].Series.O.Values[0][0];
+  values = indicator.values;
+  var time = priceCharts[SYMBOL].series.O.values[0][0];
   values = values.filter(v => v[0] >= time);
   return values.map(v => v[1] != 0 ? v[1] : '-');
 }
@@ -109,13 +109,13 @@ function getValuesForIndicator(indicator)
 function getOCLHValuesFor(symbol) {
   const priceChart = priceCharts[symbol];
 
-  const valuesLength = priceChart.Series.C.Values.length;
+  const valuesLength = priceChart.series.C.values.length;
   let result = []
   for (let i = 0; i < valuesLength; i++) {
-    let row = [priceChart.Series.O.Values[i][1], 
-                priceChart.Series.C.Values[i][1], 
-                priceChart.Series.L.Values[i][1], 
-                priceChart.Series.H.Values[i][1]];
+    let row = [priceChart.series.O.values[i][1], 
+                priceChart.series.C.values[i][1], 
+                priceChart.series.L.values[i][1], 
+                priceChart.series.H.values[i][1]];
     result.push(row);
   }
 
@@ -125,8 +125,8 @@ function getOCLHValuesFor(symbol) {
 function getVolumeFor(symbol)
 {
   const priceChart = priceCharts[symbol];
-  const values = priceChart.Series.VOL.Values;
-  console.assert(values.length == priceChart.Series.O.Values.length, "Volume data  length not equal to price data length");
+  const values = priceChart.series.VOL.values;
+  console.assert(values.length == priceChart.series.O.values.length, "Volume data  length not equal to price data length");
   
   return values.map(v => v[1] != 0 ? v[1] : '-');
 }
@@ -138,7 +138,7 @@ function getVolumeComparedFor(symbol, compOperator)
   if(compOperator != null)
   {
     const priceChart = priceCharts[symbol];
-    const closeValues = priceChart.Series.C.Values.map(v => v[1]);
+    const closeValues = priceChart.series.C.values.map(v => v[1]);
   
     result = [];
     result.push(vol[0])
@@ -176,15 +176,15 @@ function getOrderDataFor(symbol, timeArray, operation)
       orderKeys.forEach(key => {
         orders.push(ORDERS[key]);
       });
-      orders = orders.filter(o => o.Symbol.Value == symbol); 
-      orders = orders.filter(o => o.Direction == direction);
+      orders = orders.filter(o => o.symbol.value == symbol); 
+      orders = orders.filter(o => o.direction == direction);
       
       let returnArray = []
       orders.forEach(o => {
-        const oTime = Date.parse(o.Time);
+        const oTime = Date.parse(o.time);
         const indexInTime = timeArray.findIndex(t => t == oTime);
         //console.log(indexInTime);
-        returnArray.push([indexInTime, o.Price]);
+        returnArray.push([indexInTime, o.price]);
       });
 
       return returnArray;
@@ -211,7 +211,7 @@ const sellOrderData = getSellOrderDataFor(SYMBOL, timeArray);
 
 function getDataForLegend()
 {
-  return [SYMBOL].concat(indicatorsArray.map(x => x.Name)).concat([
+  return [SYMBOL].concat(indicatorsArray.map(x => x.name)).concat([
     'BUY', 'SELL'
   ]);
 }
