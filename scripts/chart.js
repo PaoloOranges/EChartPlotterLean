@@ -234,7 +234,7 @@ function getDataForSeries()
     (x) => 
     {
       return {
-        name: x.Name,
+        name: x.name,
         type: 'line',
         data: getValuesForIndicator(x),
         smooth: true,
@@ -247,7 +247,7 @@ function getDataForSeries()
       (x) => 
       {
         return {
-          name: x.Name,
+          name: x.name,
           type: 'line',
           data: getValuesForIndicator(x),
           smooth: true,
